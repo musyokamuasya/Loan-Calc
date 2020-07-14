@@ -16,9 +16,35 @@ function calculateResults(e) {
     /* Calculate Simple Interest
      Interest = principal * percentage-rate * time
      */
-    totalInterest.value = (amount * interest * years).toFixed(2);
-    totalPayment.value = (amount * (interest + 1) * years).toFixed(2);
-    monthlyPayment.value = ((amount * (interest + 1) * years) / 12).toFixed(2);
+
+    // This method has a bug, I'll figure out later. The method is not accurate
+
+    const amountPayable = (amount * (interest + 1) * years);
+    if (amountPayable > amount) {
+        // Assumes no zero interest
+        totalInterest.value = (amount * interest * years).toFixed(2);
+        totalPayment.value = amountPayable.toFixed(2);
+        monthlyPayment.value = ((amount * (interest + 1) * years) / 12).toFixed(2);
+    } else {
+        showError('Please check your numbers');
+    }
+
 
     e.preventDefault();
+}
+
+function showError(message) {
+    // Create an error div
+    const errorDiv = document.createElement('div');
+    // Give it classes of alert and alert danger to make it red
+    errorDiv.className = 'alert alert-danger';
+    // Get the parent card and the heading 
+    const parentCard = document.querySelector('.card');
+    const heading = document.querySelector('.heading');
+    // Create textnode and append it in the card before the heading
+    errorDiv.appendChild(document.createTextNode(message));
+    parentCard.insertBefore(errorDiv, heading);
+    setTimeout(() => {
+        document.querySelector('.alert').remove();
+    }, 3000);
 }
