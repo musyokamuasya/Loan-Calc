@@ -1,9 +1,16 @@
 // Submit
-document.querySelector('#loan-form').addEventListener('submit', calculateResults);
+document.querySelector('#loan-form').addEventListener('submit', (e) => {
+    document.querySelector('#results').style.display = 'none';
+    document.querySelector('#loading').style.display = 'block';
+
+    // Call calculate after two seconds (Just for UX!!)
+    setTimeout(calculateResults(), 2000);
+    e.preventDefault();
+});
 
 // Calculate Results
 
-function calculateResults(e) {
+function calculateResults() {
     console.log('Calculating...');
     // UI Vars
     const amount = document.querySelector('#amount').value; //Principal value
@@ -25,12 +32,16 @@ function calculateResults(e) {
         totalInterest.value = (amount * interest * years).toFixed(2);
         totalPayment.value = amountPayable.toFixed(2);
         monthlyPayment.value = ((amount * (interest + 1) * years) / 12).toFixed(2);
+
+        // Show results and hide laoding indicator
+        document.querySelector('#results').style.display = 'block';
+        document.querySelector('#loading').style.display = 'none';
     } else {
         showError('Please check your numbers');
     }
 
 
-    e.preventDefault();
+
 }
 
 function showError(message) {
